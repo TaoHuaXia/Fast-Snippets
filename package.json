@@ -3,7 +3,7 @@
 	"displayName": "Fast Snippets",
 	"publisher": "serverWang",
 	"description": "fast create your snippets",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.38.0"
 	},
