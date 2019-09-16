@@ -4,7 +4,7 @@ const vscode = require('vscode');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-
+const snippetsLineTabCount = 3
 function getTabCount(str) {
 	const reg = /^(\t)+/g
 	const result = reg.exec(str)
@@ -19,27 +19,53 @@ function formatQuote(text) {
 	return text.replace(/\"/g, '\\"')
 }
 
-function fixTab(text, fixTabCount, isEnd) {
-	const currentTab = getTabCount(text)
-	let totalTab = currentTab + fixTabCount
-	text = formatQuote(text)
-	text = `\"${text.trim()}\"${isEnd ? '' : ','}`
-	if (totalTab === 0) {
-		return text
-	}
-	while(totalTab > 0) {
-		text = '\t' + text
-		totalTab--
+function fixTab(text, tabCount) {
+	if (tabCount !== 0) {
+		while(tabCount > 0) {
+			// 此处使用\\t，是因为使用\t vscode会报错，必须使用\t来代表换行符
+			text = '\\t' + text
+			tabCount--
+		}
 	}
 	return text
 }
-function formatTextLine(textLine, baseTabCount) {
-	const fixTabCount = 3 - baseTabCount
+
+function formatLine(text, firstLineTab, isEnd) {
+	let result = ''
+
+	// 获取文本行本身的tab数量
+	let currentTab = getTabCount(text)
+
+	// 与首行的tab数量进行对比，获取相对于首行的缩进差
+	let offsetTab = currentTab - firstLineTab
+
+	// 获取缩进差之后，清除文本的前后缩进
+	result = text.trim()
+
+	// 格式化初始文本中的双引号
+	result = formatQuote(result)
+
+	// 增加相对首行的缩进
+	result = fixTab(result, offsetTab)
+
+	// 包裹需要渲染出来的文本行，并添加“，”（body为数组，数组项之间需要“，”间隔）
+	result = `\"${result}\"${isEnd ? '' : ','}`
+
+	// 增加userSnippets所需的缩进
+	result = Array(snippetsLineTabCount).fill('\t').join('') + result
+
+	return result
+}
+
+function formatLines(textLine, firstLineTab) {
+	// 遍历文本行
 	return textLine.map((line, index) => {
 		if (!line || line === '') {
+			// 如果为空行，则直接返回空行
 			return line
 		} else {
-			return fixTab(line.trimEnd(), fixTabCount, index === textLine.length - 1)
+			// 如果不是空行，则对文本进行格式化
+			return formatLine(line, firstLineTab, index === firstLineTab.length - 1)
 		}
 	})
 }
@@ -110,11 +136,12 @@ function activate(context) {
 		if (getTabCount(textLine[0])) {
 			textLine[0].replace(/^(\t)+/, Array(firstLineTab).fill('\t').join(''))
 		} else {
+			textLine[0].trim()
 			textLine[0] = fixTab(textLine[0], firstLineTab)
 		}
 		
 		// 对文本进行格式化
-		const formattedTextLine = formatTextLine(textLine, firstLineTab)
+		const formattedTextLine = formatLines(textLine, firstLineTab)
 
 		// 将格式化后的文本插入通用模板
 		const result = [...template]

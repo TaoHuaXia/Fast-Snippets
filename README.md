@@ -6,17 +6,18 @@ formatted snippets eg:
 
 ```
 "your description": {
-		"scope": "",
-		"prefix": "your prefix",
-		"body": [
-			"50%{",
-				"left:calc(100% - 95px);",
-				"width:60px;",
-				"height:60px;",
-			"}"
-		],
-		"description": "Log output to console"
-	}
+	"scope": "",
+	"prefix": "initB",
+	"body": [
+		"<body>",
+		"\t<div class=\"effect\">",
+		"\t\t<div class=\"blackball\"></div>",
+		"\t\t<div class=\"redball\"></div>",
+		"\t</div>",
+		"</body>",
+	],
+	"description": "Log output to console"
+}
 ```
 
 ## Release Notes
@@ -24,4 +25,9 @@ formatted snippets eg:
 ### 1.0.0
 
 first simple version
+
+### 1.0.1
+
+fix tab problem.
+now, tab in snippets will format as '\\t'(like the example above), because use '\t' will get lint error in vscode
 
