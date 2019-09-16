@@ -1,8 +1,9 @@
 {
 	"name": "fast-snippets",
 	"displayName": "Fast Snippets",
+	"publisher": "serverWang",
 	"description": "fast create your snippets",
-	"version": "1.0.1",
+	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.38.0"
 	},
