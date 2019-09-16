@@ -73,7 +73,7 @@ function activate(context) {
 			vscode.window.showErrorMessage('当前没有活动的文本编辑器！')
 			return
 		}
-		if (!active.selection.isEmpty) {
+		if (active.selection.isEmpty) {
 			vscode.window.showErrorMessage('当前没有选中的内容！')
 			return
 		}

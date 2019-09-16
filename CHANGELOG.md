@@ -1,9 +1,5 @@
-# Change Log
+## Release Notes
 
-All notable changes to the "fastsnipptes" extension will be documented in this file.
+### 1.0.0
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+first test version
